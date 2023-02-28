@@ -51,6 +51,8 @@ export default class YarnGraph {
   public async getWorkspacesForFiles(...files: string[]): Promise<string[]> {
     const resultSet = new Set<string>();
 
+    files = files.filter(f => !f.includes('.yarn'));
+
     const workspaceDirs = new Set(
       await Promise.all(
         files.map(async (file) => {
