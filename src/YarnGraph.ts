@@ -48,7 +48,7 @@ export default class YarnGraph {
     return [...resultSet];
   }
 
-  public async getWorkspacesForFiles(...files: string[]): Promise<string[]> {
+  public async getWorkspacesForFiles(files: string[], skipRoot = false): Promise<string[]> {
     const resultSet = new Set<string>();
 
     files = files.filter(f => !f.includes('.yarn'));
@@ -69,6 +69,7 @@ export default class YarnGraph {
 
     for (const workspaceDir of workspaceDirs) {
       if (workspaceDir === undefined) continue;
+      if (skipRoot && workspaceDir === '.') continue;
       const workspaceId = this.getWorkspaceId(workspaceDir);
       core.info(`Workspace '${workspaceDir}' identified as ${workspaceId}`);
       resultSet.add(workspaceId);

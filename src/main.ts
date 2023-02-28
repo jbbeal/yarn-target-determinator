@@ -8,12 +8,13 @@ const main = async (): Promise<void> => {
     const files: string[] = JSON.parse(
       core.getInput("files", { required: true })
     );
+    const skipRoot = core.getBooleanInput("skipRoot", { required: false });
 
     core.info("Building worktree dependency graph");
     const graph = new YarnGraph(await listYarnWorkspaces());
 
     core.startGroup("Identifying directly modified workspaces");
-    const changedWorkspaces = await graph.getWorkspacesForFiles(...files);
+    const changedWorkspaces = await graph.getWorkspacesForFiles(files, skipRoot);
     core.endGroup();
     core.info(`Affected workspaces [${changedWorkspaces.join(", ")}]`);
 
